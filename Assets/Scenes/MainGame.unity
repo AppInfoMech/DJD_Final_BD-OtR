@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 488214760}
   - component: {fileID: 488214759}
   - component: {fileID: 488214758}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +492,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488214757}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -655,7 +655,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 4940800540635021762, guid: f4b74b95bb349e1449c23bba386aad07,
     type: 3}
-  respawnTime: 5
 --- !u!1 &571362059
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,6 +946,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1213730402}
+  isGrounded: 0
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  jumpForce: 200
 --- !u!1 &1342056533
 GameObject:
   m_ObjectHideFlags: 0

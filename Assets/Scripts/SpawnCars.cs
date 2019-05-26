@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnCars : MonoBehaviour
 {
     public GameObject carPrefab;
-    public float respawnTime = 5.0f;
+    // public float respawnTime = 5.0f;
     private Vector2 screenBounds;
 
     // Start is called before the first frame update
@@ -20,13 +20,14 @@ public class SpawnCars : MonoBehaviour
     {
         GameObject c = Instantiate(carPrefab) as GameObject;
         c.transform.position = new Vector2(screenBounds.x * 2, -260f);
+        Debug.Log("Car Spawned");
     }
 
    IEnumerator carSpawn()
     {
         while (true)
         {
-            yield return new WaitForSeconds(respawnTime);
+            yield return new WaitForSeconds(Random.Range(4f, 8f));
             spawnCar();
         }
         
