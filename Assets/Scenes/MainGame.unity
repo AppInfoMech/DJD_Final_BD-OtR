@@ -951,6 +951,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   jumpForce: 200
+  fallMultiplier: 8
+  lowJumpMultiplier: 4
 --- !u!1 &1342056533
 GameObject:
   m_ObjectHideFlags: 0

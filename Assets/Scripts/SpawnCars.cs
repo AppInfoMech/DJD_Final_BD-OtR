@@ -27,7 +27,7 @@ public class SpawnCars : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(4f, 8f));
+            yield return new WaitForSeconds(Random.Range(2.5f, 6f));
             spawnCar();
         }
         
