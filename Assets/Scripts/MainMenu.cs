@@ -5,18 +5,10 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void MainMenuPlay()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("Tutorial");
     }
 
     public void MainMenuQuit()

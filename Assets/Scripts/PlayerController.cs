@@ -6,60 +6,100 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Animator animator;
-    public bool isGrounded;
-    public LayerMask groundLayers;
-    public float jumpForce = 200f;
+    public AudioSource jump;
 
-    public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2f;
+    public bool isGrounded
+    {
+        get
+        {
+            Collider2D collider = Physics2D.OverlapCircle(transform.position, 100, LayerMask.GetMask("Ground"));
 
-    Rigidbody2D rb;
+            if (collider != null) return true;
+
+            return false;
+        }
+    }
+
+    public float jumpVelocity = 270f;
+    public float highJumpVelocity = 310f;
+    public float moveSpeed = 5f;
+    public float jumpTime = 0.35f;
+    public float timeOfJump;
+    public bool running;
+
+    Rigidbody2D rgdBody;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rgdBody = GetComponent<Rigidbody2D>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; 
+        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+        timeOfJump = -1000.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (rb.velocity.y < 0)
+        Vector2 currentVelocity = rgdBody.velocity;
+
+        if (currentVelocity.x > 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        } else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+            running = true;
+            
+        }
+        else if (currentVelocity.x == 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            running = false;
         }
 
-
-        Jump();
+        animator.SetFloat("VelY", currentVelocity.y);
+        animator.SetFloat("VelX", currentVelocity.x);
+        animator.SetBool("isRunning", running);
+        animator.SetBool("isGrounded", isGrounded);
         // Vector3 movement = new Vector3(5f, 0f, 0f);
         // transform.position += movement * Time.deltaTime * moveSpeed;
     }
 
-    void Jump()
+    void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapArea(new Vector2(transform.position.x - 118.41825f,
-            transform.position.y - 118.41825f), new Vector2(transform.position.x + 118.41825f,
-                transform.position.y + 118.41825f), groundLayers);
+        Vector2 currentVelocity = rgdBody.velocity;
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        currentVelocity = new Vector2(moveSpeed, currentVelocity.y);
+
+        if (Input.GetButtonDown("Jump"))
         {
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            if (isGrounded)
+            {
+                currentVelocity.y = jumpVelocity;
+                timeOfJump = Time.time;
+                jump.Play();
+            }
+            
         }
+        else if (Input.GetButton("Jump"))
+        {
+            if ((Time.time - timeOfJump) < jumpTime)
+            {
+                currentVelocity.y = jumpVelocity;
+            }
+        }
+        else
+        {
+            timeOfJump = -1000.0f;
+        }
+
+        rgdBody.velocity = currentVelocity;
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D cutscene)
     {
-        if (col.gameObject.tag.Equals("Obstacle"))
+        if(cutscene.gameObject.tag == "Cutscene")
         {
-            SceneManager.LoadScene("Menu");
+            moveSpeed = 0f;
         }
     }
 }
